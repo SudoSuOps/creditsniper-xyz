@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /download.html
+
+Sitemap: https://creditsniper.xyz/sitemap.xml
