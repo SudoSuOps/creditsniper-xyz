@@ -1,0 +1,38 @@
+# CreditSniper
+
+> AI-powered consumer credit defense. Analyzes credit reports, identifies FCRA and FDCPA violations, generates dispute letters with real statute citations, and delivers via certified or regular mail. Built by Swarm & Bee Intelligence.
+
+CreditSniper-27B is a Qwen3.5-27B fine-tune trained on 84,115 consumer credit defense pairs covering FCRA Section 611/623/609, FDCPA Section 805/806/809, FACTA identity theft provisions, and ECOA equal credit opportunity. The model passes adversarial tests including wrong-statute traps and FDCPA/original-creditor distinction.
+
+## Product
+
+- [CreditSniper App](https://creditsniper.xyz/app): Paste your credit report, get analysis, generate dispute letters, print or mail them
+- [Pricing](https://creditsniper.xyz/pricing): Free trial (1 analysis + 2 letters), Pro $49/mo unlimited, Business custom
+
+## How It Works
+
+1. Consumer pastes credit report text
+2. CreditSniper-27B analyzes every tradeline, identifies errors and violations
+3. Dispute letters generated with account-specific statute citations
+4. Consumer prints letters (free) or we mail via USPS ($1.99 regular, $4.99 certified)
+
+## Legal Coverage
+
+- FCRA Section 611 — dispute investigation procedures
+- FCRA Section 623 — furnisher accuracy obligations
+- FCRA Section 609 — consumer disclosure rights
+- FDCPA Section 809 — debt validation
+- FDCPA Section 805 — communication restrictions
+- FDCPA Section 806 — harassment prohibition
+- FACTA — identity theft and fraud alert provisions
+- ECOA — equal credit opportunity
+
+## Privacy
+
+We don't store credit report data. We don't mine consumer data. All processing occurs in memory on bare-metal hardware owned by Swarm & Bee Intelligence. No cloud. No third-party access.
+
+## Contact
+
+- Email: build@swarmandbee.ai
+- Parent company: [Swarm & Bee Intelligence](https://swarmandbee.ai)
+- ENS: creditsniper.eth
