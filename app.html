@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditSniper — Analyze Your Report</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050505;--surface:#0e0e0e;--surface-2:#141414;--border:#1e1e1e;
+  --primary:#f59e0b;--accent:#fbbf24;
+  --text:#e8e8e8;--text-2:#a0a0a0;--text-3:#5a5a5a;
+  --max-w:900px;--radius:8px;
+  --font:'DM Sans',system-ui,sans-serif;--heading:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--heading);font-weight:600}
+a{color:var(--primary);text-decoration:none}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;max-width:var(--max-w);margin:0 auto}
+.logo{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--text)}
+.logo span{color:var(--primary)}
+.nav-right{display:flex;gap:16px;align-items:center;font-size:.85rem}
+.nav-right a{color:var(--text-2)}
+
+/* MAIN */
+.app-container{max-width:var(--max-w);margin:0 auto;padding:24px}
+
+/* INPUT SECTION */
+.input-section{margin-bottom:24px}
+.input-section label{font-size:.88rem;color:var(--text-2);display:block;margin-bottom:8px}
+.report-input{width:100%;min-height:200px;padding:16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:var(--mono);font-size:.82rem;line-height:1.6;resize:vertical;outline:none}
+.report-input:focus{border-color:var(--primary)}
+.report-input::placeholder{color:var(--text-3)}
+.analyze-btn{margin-top:12px;background:var(--primary);color:#050505;border:none;padding:12px 32px;border-radius:6px;font-weight:600;font-size:.95rem;cursor:pointer;font-family:var(--font)}
+.analyze-btn:hover{background:var(--accent)}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* RESULTS */
+.results{margin-top:24px}
+.results h2{font-size:1.2rem;margin-bottom:16px}
+.issue-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:12px}
+.issue-card.critical{border-left:3px solid var(--red)}
+.issue-card.warning{border-left:3px solid var(--yellow)}
+.issue-card.good{border-left:3px solid var(--green)}
+.issue-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.issue-title{font-weight:600;font-size:.95rem}
+.issue-badge{font-size:.72rem;padding:2px 8px;border-radius:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.issue-badge.critical{background:rgba(239,68,68,.15);color:var(--red)}
+.issue-badge.warning{background:rgba(245,158,11,.15);color:var(--yellow)}
+.issue-badge.good{background:rgba(34,197,94,.15);color:var(--green)}
+.issue-detail{font-size:.85rem;color:var(--text-2);margin-bottom:8px}
+.issue-statute{font-family:var(--mono);font-size:.78rem;color:var(--primary)}
+.issue-actions{display:flex;gap:8px;margin-top:10px}
+.issue-actions button{font-size:.82rem;padding:6px 16px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:var(--font)}
+.issue-actions button:hover{border-color:var(--primary);color:var(--primary)}
+.issue-actions button.mail{background:var(--primary);color:#050505;border-color:var(--primary)}
+
+/* LETTER MODAL */
+.letter-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);z-index:500;padding:40px;overflow-y:auto}
+.letter-modal.active{display:block}
+.letter-content{max-width:700px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px}
+.letter-content h3{margin-bottom:16px}
+.letter-text{font-family:var(--mono);font-size:.82rem;line-height:1.8;color:var(--text-2);white-space:pre-wrap;background:var(--bg);padding:20px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px;max-height:500px;overflow-y:auto}
+.letter-actions{display:flex;gap:12px;flex-wrap:wrap}
+.letter-actions button{padding:10px 20px;border-radius:6px;font-weight:600;font-size:.88rem;cursor:pointer;border:none;font-family:var(--font)}
+.letter-actions .btn-download{background:var(--primary);color:#050505}
+.letter-actions .btn-print{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.letter-actions .btn-mail{background:var(--green);color:#050505}
+.letter-actions .btn-close{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+
+/* CHAT */
+.chat-section{margin-top:32px;border-top:1px solid var(--border);padding-top:24px}
+.chat-section h3{font-size:1rem;margin-bottom:12px}
+.chat-messages{min-height:100px;max-height:400px;overflow-y:auto;margin-bottom:12px}
+.chat-msg{padding:8px 12px;margin-bottom:8px;border-radius:var(--radius);font-size:.88rem;line-height:1.6}
+.chat-msg.user{background:var(--surface-2);text-align:right;color:var(--text)}
+.chat-msg.assistant{background:var(--surface);border:1px solid var(--border);color:var(--text-2)}
+.chat-input-row{display:flex;gap:8px}
+.chat-input{flex:1;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:var(--font);font-size:.88rem;outline:none}
+.chat-input:focus{border-color:var(--primary)}
+.chat-send{background:var(--primary);color:#050505;border:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;font-family:var(--font)}
+
+/* STATUS */
+.status-bar{text-align:center;font-size:.82rem;color:var(--text-3);padding:8px;min-height:2em}
+.status-bar.loading{color:var(--primary)}
+.status-bar.error{color:var(--red)}
+
+/* PRIVACY BADGE */
+.privacy-badge{text-align:center;font-size:.75rem;color:var(--text-3);padding:16px;margin-top:24px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Credit<span>Sniper</span></a>
+  <div class="nav-right">
+    <a href="#" id="balance-display">Credits: --</a>
+    <a href="/">Home</a>
+  </div>
+</nav>
+
+<div class="app-container">
+
+  <!-- INPUT -->
+  <div class="input-section">
+    <label>Paste your credit report text below</label>
+    <textarea class="report-input" id="reportInput" placeholder="Paste your credit report here...
+
+Example:
+Equifax Credit Report
+Name: John Doe
+Score: 612
+
+TRADELINES:
+1. Chase Visa — $8,500 limit, $7,200 balance, current
+2. Capital One — $3,000 limit, $2,850 balance, 30-day late Jan 2026
+3. Midland Credit Management — $4,200 collection, original creditor AT&T
+4. Ally Financial Auto — $18,000, $12,400 remaining, current
+..."></textarea>
+    <button class="analyze-btn" id="analyzeBtn" onclick="analyzeReport()">Analyze My Report</button>
+    <div class="status-bar" id="statusBar"></div>
+  </div>
+
+  <!-- RESULTS (populated by JS) -->
+  <div class="results" id="results" style="display:none">
+    <h2>Analysis Results</h2>
+    <div id="issueCards"></div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-section">
+    <h3>Ask CreditSniper</h3>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-row">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ask about your credit situation..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+
+  <div class="privacy-badge">
+    Your credit report is processed in memory and never saved to our servers. We are healers only.
+  </div>
+</div>
+
+<!-- LETTER MODAL -->
+<div class="letter-modal" id="letterModal">
+  <div class="letter-content">
+    <h3>Dispute Letter</h3>
+    <div class="letter-text" id="letterText"></div>
+    <div class="letter-actions">
+      <button class="btn-download" onclick="downloadLetter()">Download PDF</button>
+      <button class="btn-print" onclick="window.print()">Print</button>
+      <button class="btn-mail" onclick="mailLetter('certified')">Mail Certified $4.99</button>
+      <button class="btn-mail" style="background:var(--primary)" onclick="mailLetter('regular')">Mail Regular $1.99</button>
+      <button class="btn-close" onclick="closeLetter()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://api.creditsniper.xyz';
+let apiKey = localStorage.getItem('cs_api_key') || '';
+let currentReport = '';
+
+// Check auth on load
+if (!apiKey) {
+  document.getElementById('statusBar').innerHTML = 'No API key. <a href="/login">Sign in</a> or <a href="/pricing">Start Free</a>';
+}
+
+async function analyzeReport() {
+  const text = document.getElementById('reportInput').value.trim();
+  if (!text) return;
+  if (!apiKey) { window.location.href = '/login'; return; }
+
+  currentReport = text;
+  const btn = document.getElementById('analyzeBtn');
+  const status = document.getElementById('statusBar');
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+  status.className = 'status-bar loading';
+  status.textContent = 'CreditSniper is reading your report...';
+
+  try {
+    const resp = await fetch(API + '/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({ report: text })
+    });
+
+    if (resp.status === 401) { window.location.href = '/login'; return; }
+    if (resp.status === 402) { status.className = 'status-bar error'; status.textContent = 'Insufficient credits. Upgrade your plan.'; return; }
+
+    const data = await resp.json();
+    renderResults(data);
+    status.className = 'status-bar';
+    status.textContent = '';
+  } catch (e) {
+    status.className = 'status-bar error';
+    status.textContent = 'Connection error. Please try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Analyze My Report';
+  }
+}
+
+function renderResults(data) {
+  const container = document.getElementById('issueCards');
+  const results = document.getElementById('results');
+  container.innerHTML = '';
+  results.style.display = 'block';
+
+  // Parse response — CreditSniper returns prose, we render it
+  const content = data.content || data.response || '';
+
+  // For now render the full analysis as a card
+  const card = document.createElement('div');
+  card.className = 'issue-card';
+  card.innerHTML = '<div class="issue-title">CreditSniper Analysis</div>'
+    + '<div class="issue-detail" style="white-space:pre-wrap;font-family:var(--mono);font-size:.8rem;line-height:1.7">' + escapeHtml(content) + '</div>'
+    + '<div class="issue-actions">'
+    + '<button onclick="generateLetter()">Generate Dispute Letters</button>'
+    + '</div>';
+  container.appendChild(card);
+}
+
+async function generateLetter() {
+  const status = document.getElementById('statusBar');
+  status.className = 'status-bar loading';
+  status.textContent = 'Generating dispute letters...';
+
+  try {
+    const resp = await fetch(API + '/letter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({ report: currentReport })
+    });
+
+    const data = await resp.json();
+    const letter = data.content || data.response || '';
+    document.getElementById('letterText').textContent = letter;
+    document.getElementById('letterModal').classList.add('active');
+    status.textContent = '';
+  } catch (e) {
+    status.className = 'status-bar error';
+    status.textContent = 'Error generating letter.';
+  }
+}
+
+function closeLetter() {
+  document.getElementById('letterModal').classList.remove('active');
+}
+
+function downloadLetter() {
+  const text = document.getElementById('letterText').textContent;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dispute-letter.txt';
+  a.click();
+}
+
+async function mailLetter(type) {
+  const cost = type === 'certified' ? '$4.99' : '$1.99';
+  if (!confirm('Mail this letter via ' + type + ' mail for ' + cost + '?')) return;
+
+  const status = document.getElementById('statusBar');
+  status.className = 'status-bar loading';
+  status.textContent = 'Sending to PostGrid...';
+
+  try {
+    const resp = await fetch(API + '/mail', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({
+        letter: document.getElementById('letterText').textContent,
+        mail_type: type
+      })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      status.className = 'status-bar';
+      status.textContent = 'Letter sent! Tracking: ' + (data.tracking_id || 'pending');
+      closeLetter();
+    } else {
+      status.className = 'status-bar error';
+      status.textContent = data.error || 'Mail failed. Try again.';
+    }
+  } catch {
+    status.className = 'status-bar error';
+    status.textContent = 'Connection error.';
+  }
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  if (!apiKey) { window.location.href = '/login'; return; }
+
+  const messages = document.getElementById('chatMessages');
+  messages.innerHTML += '<div class="chat-msg user">' + escapeHtml(msg) + '</div>';
+  input.value = '';
+
+  const thinking = document.createElement('div');
+  thinking.className = 'chat-msg assistant';
+  thinking.textContent = 'Thinking...';
+  messages.appendChild(thinking);
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const resp = await fetch(API + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({
+        message: msg,
+        context: currentReport ? 'Credit report context: ' + currentReport.substring(0, 2000) : ''
+      })
+    });
+    const data = await resp.json();
+    thinking.textContent = data.content || data.response || 'No response.';
+  } catch {
+    thinking.textContent = 'Connection error. Try again.';
+  }
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>
