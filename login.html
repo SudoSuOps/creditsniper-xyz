@@ -57,10 +57,22 @@ a{color:var(--primary);text-decoration:none}
     </button>
 
     <!-- X / TWITTER -->
-    <button onclick="signInWithX()" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.92rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+    <button onclick="signInWithX()" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.92rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       Continue with X
     </button>
+
+    <!-- WALLET (ETH / SOL) -->
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button onclick="signInWithEth()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.85rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 256 417" fill="none"><path d="M127.961 0l-2.795 9.5v275.668l2.795 2.79 127.962-75.638z" fill="#687Cde"/><path d="M127.962 0L0 212.32l127.962 75.639V154.158z" fill="#9FADFF"/><path d="M127.961 312.187l-1.575 1.92v98.199l1.575 4.601L256 236.587z" fill="#687Cde"/><path d="M127.962 416.905v-104.72L0 236.585z" fill="#9FADFF"/></svg>
+        Ethereum
+      </button>
+      <button onclick="signInWithSol()" style="flex:1;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.85rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 397 312" fill="none"><path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1z" fill="#9945FF"/><path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1z" fill="#9945FF"/><path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1z" fill="#9945FF"/></svg>
+        Solana
+      </button>
+    </div>
 
     <div class="divider">or use email</div>
 
@@ -118,6 +130,64 @@ a{color:var(--primary);text-decoration:none}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 var sb = supabase.createClient('https://chrxuobrcwqrqasfsbfj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNocnh1b2JyY3dxcnFhc2ZzYmZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxNzkxNDAsImV4cCI6MjA4OTc1NTE0MH0.bmnMdy_8UnPUJa4QGKjwA-Q2v6kP8hFhMkp95B2i6XU');
+
+async function signInWithEth() {
+  var status = document.getElementById('email-status');
+  if (typeof window.ethereum === 'undefined') {
+    status.style.color = 'var(--red)';
+    status.textContent = 'No Ethereum wallet found. Install MetaMask or Coinbase Wallet.';
+    return;
+  }
+  try {
+    status.style.color = 'var(--primary)';
+    status.textContent = 'Connecting wallet...';
+    var accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    var address = accounts[0];
+    var nonce = 'Sign in to CreditSniper\n\nWallet: ' + address + '\nTimestamp: ' + new Date().toISOString();
+    var signature = await window.ethereum.request({ method: 'personal_sign', params: [nonce, address] });
+    var { data, error } = await sb.auth.signInWithIdToken({
+      provider: 'ethereum',
+      token: JSON.stringify({ address: address, nonce: nonce, signature: signature })
+    });
+    if (error) {
+      status.style.color = 'var(--red)';
+      status.textContent = error.message;
+    }
+  } catch(e) {
+    status.style.color = 'var(--red)';
+    status.textContent = e.message || 'Wallet connection failed.';
+  }
+}
+
+async function signInWithSol() {
+  var status = document.getElementById('email-status');
+  if (typeof window.solana === 'undefined' || !window.solana.isPhantom) {
+    status.style.color = 'var(--red)';
+    status.textContent = 'No Solana wallet found. Install Phantom.';
+    return;
+  }
+  try {
+    status.style.color = 'var(--primary)';
+    status.textContent = 'Connecting wallet...';
+    var resp = await window.solana.connect();
+    var address = resp.publicKey.toString();
+    var message = 'Sign in to CreditSniper\n\nWallet: ' + address + '\nTimestamp: ' + new Date().toISOString();
+    var encoded = new TextEncoder().encode(message);
+    var signed = await window.solana.signMessage(encoded, 'utf8');
+    var sigHex = Array.from(signed.signature).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    var { data, error } = await sb.auth.signInWithIdToken({
+      provider: 'solana',
+      token: JSON.stringify({ address: address, nonce: message, signature: sigHex })
+    });
+    if (error) {
+      status.style.color = 'var(--red)';
+      status.textContent = error.message;
+    }
+  } catch(e) {
+    status.style.color = 'var(--red)';
+    status.textContent = e.message || 'Wallet connection failed.';
+  }
+}
 
 async function signInWithX() {
   var { data, error } = await sb.auth.signInWithOAuth({
