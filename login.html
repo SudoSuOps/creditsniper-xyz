@@ -136,7 +136,7 @@ sb.auth.onAuthStateChange(function(event, session) {
   }
 });
 
-function handleEmail(e) {
+async function handleEmail(e) {
   e.preventDefault();
   var email = document.getElementById('user-email').value.trim();
   var name = document.getElementById('user-name').value.trim();
@@ -148,31 +148,32 @@ function handleEmail(e) {
   btn.disabled = true;
   status.textContent = '';
 
-  fetch('https://router.swarmandbee.ai/subscribe', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({email: email, name: name || undefined, source: 'creditsniper'})
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.ok || (data.message && data.message.includes('already'))) {
+  try {
+    // Use Supabase Magic Link — sends a sign-in email directly
+    var { data, error } = await sb.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: 'https://creditsniper.xyz/app',
+        data: { full_name: name || undefined, source: 'creditsniper' }
+      }
+    });
+
+    if (error) {
+      status.style.color = 'var(--red)';
+      status.textContent = error.message;
+    } else {
       // Show check email step
       document.getElementById('confirm-email').textContent = email;
       document.getElementById('step-email').classList.add('hidden');
       document.getElementById('step-confirm').classList.remove('hidden');
-    } else {
-      status.style.color = 'var(--red)';
-      status.textContent = data.message || 'Something went wrong. Try again.';
     }
-  })
-  .catch(function() {
+  } catch(ex) {
     status.style.color = 'var(--red)';
     status.textContent = 'Connection error. Try again.';
-  })
-  .finally(function() {
-    btn.textContent = 'Continue';
+  } finally {
+    btn.textContent = 'Continue with Email';
     btn.disabled = false;
-  });
+  }
   return false;
 }
 

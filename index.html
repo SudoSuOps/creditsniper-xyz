@@ -386,7 +386,7 @@ sb.auth.onAuthStateChange(function(event, session) {
   }
 });
 
-function heroSignup(e) {
+async function heroSignup(e) {
   e.preventDefault();
   var email = document.getElementById('hero-email').value.trim();
   var status = document.getElementById('hero-status');
@@ -396,30 +396,30 @@ function heroSignup(e) {
   btn.textContent = 'Creating...';
   btn.disabled = true;
 
-  fetch('https://router.swarmandbee.ai/subscribe', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({email: email, source: 'creditsniper_homepage'})
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.ok || (data.message && data.message.includes('already'))) {
+  try {
+    var { data, error } = await sb.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: 'https://creditsniper.xyz/app',
+        data: { source: 'creditsniper_homepage' }
+      }
+    });
+
+    if (error) {
+      status.style.color = '#ef4444';
+      status.textContent = error.message || 'Try again.';
+    } else {
       status.style.color = '#22c55e';
       status.textContent = 'Check your email for your sign-in link.';
       document.getElementById('hero-email').value = '';
-    } else {
-      status.style.color = '#ef4444';
-      status.textContent = data.message || 'Try again.';
     }
-  })
-  .catch(function() {
+  } catch(ex) {
     status.style.color = '#ef4444';
     status.textContent = 'Connection error. Try again.';
-  })
-  .finally(function() {
+  } finally {
     btn.textContent = 'Start Free';
     btn.disabled = false;
-  });
+  }
   return false;
 }
 </script>
