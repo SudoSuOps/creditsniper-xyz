@@ -51,9 +51,15 @@ a{color:var(--primary);text-decoration:none}
     <p>Enter your email. We'll send you a sign-in link.</p>
 
     <!-- GOOGLE -->
-    <button onclick="signInWithGoogle()" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.92rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+    <button onclick="signInWithGoogle()" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.92rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
       Continue with Google
+    </button>
+
+    <!-- X / TWITTER -->
+    <button onclick="signInWithX()" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-weight:500;font-size:.92rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Continue with X
     </button>
 
     <div class="divider">or use email</div>
@@ -112,6 +118,17 @@ a{color:var(--primary);text-decoration:none}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 var sb = supabase.createClient('https://chrxuobrcwqrqasfsbfj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNocnh1b2JyY3dxcnFhc2ZzYmZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxNzkxNDAsImV4cCI6MjA4OTc1NTE0MH0.bmnMdy_8UnPUJa4QGKjwA-Q2v6kP8hFhMkp95B2i6XU');
+
+async function signInWithX() {
+  var { data, error } = await sb.auth.signInWithOAuth({
+    provider: 'twitter',
+    options: { redirectTo: 'https://creditsniper.xyz/app' }
+  });
+  if (error) {
+    document.getElementById('email-status').style.color = 'var(--red)';
+    document.getElementById('email-status').textContent = error.message;
+  }
+}
 
 async function signInWithGoogle() {
   var { data, error } = await sb.auth.signInWithOAuth({
