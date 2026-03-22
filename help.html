@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐝 CreditSniper — Help</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050505;--surface:#0e0e0e;--surface-2:#141414;--border:#1e1e1e;--primary:#f59e0b;--accent:#fbbf24;--text:#e8e8e8;--text-2:#a0a0a0;--text-3:#5a5a5a;--radius:8px;--font:'DM Sans',system-ui,sans-serif;--heading:'Space Grotesk',system-ui,sans-serif;--green:#22c55e;--red:#ef4444}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--heading);font-weight:600}
+a{color:var(--primary);text-decoration:none}
+.container{max-width:700px;margin:0 auto;padding:0 24px}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;max-width:700px;margin:0 auto}
+.logo{font-family:var(--heading);font-size:1.1rem;font-weight:700;color:var(--text)}
+.logo span{color:var(--primary)}
+.nav-r{font-size:.85rem}
+.nav-r a{color:var(--text-2);margin-left:16px}
+
+.hero{padding:80px 0 40px;text-align:center}
+.hero h1{font-size:1.8rem;margin-bottom:8px}
+.hero p{color:var(--text-2);font-size:.95rem}
+
+/* FAQ */
+.faq{margin-bottom:48px}
+.faq h2{font-size:1.2rem;margin-bottom:16px}
+.faq-item{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:8px;cursor:pointer}
+.faq-item h3{font-size:.92rem;display:flex;justify-content:space-between;align-items:center}
+.faq-item h3 .toggle{color:var(--text-3);font-size:1.1rem;transition:transform .2s}
+.faq-item.open h3 .toggle{transform:rotate(45deg)}
+.faq-item p{font-size:.85rem;color:var(--text-2);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s,margin .3s;margin-top:0}
+.faq-item.open p{max-height:300px;margin-top:10px}
+
+/* SUPPORT FORM */
+.support{margin-bottom:64px}
+.support h2{font-size:1.2rem;margin-bottom:8px}
+.support>p{font-size:.88rem;color:var(--text-2);margin-bottom:20px}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:.82rem;color:var(--text-3);margin-bottom:4px}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font);font-size:.9rem;outline:none}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--primary)}
+.fg textarea{min-height:100px;resize:vertical}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.btn{width:100%;padding:12px;border:none;border-radius:6px;background:var(--primary);color:#050505;font-weight:600;font-size:.95rem;cursor:pointer;font-family:var(--font)}
+.btn:disabled{opacity:.5}
+.status{font-size:.82rem;text-align:center;margin-top:12px;min-height:1.5em}
+
+footer{border-top:1px solid var(--border);padding:36px 0;text-align:center;font-size:.82rem;color:var(--text-3)}
+footer a{color:var(--text-3);margin:0 12px}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">🐝 Credit<span>Sniper</span></a>
+  <div class="nav-r">
+    <a href="/">Home</a>
+    <a href="/app">App</a>
+    <a href="/pricing">Pricing</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<section class="hero">
+  <h1>How can we help?</h1>
+  <p>Check the FAQ below or send us a message.</p>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>How does CreditSniper work? <span class="toggle">+</span></h3>
+    <p>Paste your credit report text into the app. CreditSniper analyzes every tradeline, identifies errors and violations, and generates dispute letters with real statute citations. You print the letters yourself (free) or we mail them for you ($1.99 regular, $4.99 certified).</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>Where do I get my credit report? <span class="toggle">+</span></h3>
+    <p>Visit <a href="https://www.annualcreditreport.com" target="_blank">annualcreditreport.com</a> — the federally authorized source for free credit reports from Equifax, Experian, and TransUnion. You can get all three for free.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>Do you store my credit report? <span class="toggle">+</span></h3>
+    <p>No. Your report is processed in memory and never saved to our servers. We don't store, sell, or mine your data. All processing happens on hardware we own — no cloud, no third party. We are healers only.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>Is CreditSniper a law firm? <span class="toggle">+</span></h3>
+    <p>No. CreditSniper is an AI tool that helps you prepare dispute documents. It cites real federal statutes (FCRA, FDCPA) and follows established procedures, but it is not an attorney and does not provide legal advice. Consult a licensed attorney for legal counsel.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>How does the mail service work? <span class="toggle">+</span></h3>
+    <p>After generating a letter, click "Mail It." We print and mail your letter via USPS through PostGrid. Certified mail ($4.99) includes return receipt — creating a legal paper trail proving the bureau received your dispute. Regular mail ($1.99) sends via First Class.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>What is certified mail and why does it matter? <span class="toggle">+</span></h3>
+    <p>FCRA §611 requires credit bureaus to investigate disputes within 30 days. Certified mail with return receipt proves WHEN the bureau received your dispute, which starts the 30-day clock. Without it, they can claim they never got it.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>How do I cancel? <span class="toggle">+</span></h3>
+    <p>Email build@swarmandbee.ai with "cancel" in the subject. Or message us through the form below. No contracts, no cancellation fees, no questions asked.</p>
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <h3>I lost my API key. How do I sign in? <span class="toggle">+</span></h3>
+    <p>Your API key was emailed when you confirmed your account. Search your email for "CreditSniper" or "Swarm & Bee." If you can't find it, send us a message below and we'll help.</p>
+  </div>
+</section>
+
+<!-- SUPPORT FORM -->
+<section class="support">
+  <h2>Need more help?</h2>
+  <p>Send us a message. We respond within 24 hours.</p>
+
+  <form onsubmit="return submitHelp(event)">
+    <div class="fg">
+      <label>Email</label>
+      <input type="email" id="h-email" required placeholder="you@email.com">
+    </div>
+    <div class="fg">
+      <label>Topic</label>
+      <select id="h-topic">
+        <option value="general">General question</option>
+        <option value="account">Account / sign in issue</option>
+        <option value="dispute">Dispute letter help</option>
+        <option value="mail">Mail service question</option>
+        <option value="billing">Billing / subscription</option>
+        <option value="bug">Report a bug</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Message</label>
+      <textarea id="h-message" required placeholder="Describe your issue or question..."></textarea>
+    </div>
+    <button type="submit" class="btn" id="h-btn">Send Message</button>
+    <p class="status" id="h-status"></p>
+  </form>
+</section>
+
+</div>
+
+<footer>
+  <a href="/">Home</a>
+  <a href="/app">App</a>
+  <a href="/pricing">Pricing</a>
+  <a href="mailto:build@swarmandbee.ai">Email</a>
+</footer>
+
+<script>
+function submitHelp(e) {
+  e.preventDefault();
+  var email = document.getElementById('h-email').value.trim();
+  var topic = document.getElementById('h-topic').value;
+  var message = document.getElementById('h-message').value.trim();
+  var status = document.getElementById('h-status');
+  var btn = document.getElementById('h-btn');
+
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  // Send to Discord webhook
+  fetch('https://discord.com/api/webhooks/1485069668573122591/LOI8UffI6GQEH5SRuFG_iVq0MgVXH0wKZTFpno09DKGx91cHmZmtvnP6EI3g8N-eyGGd', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      content: '**🐝 CreditSniper Support**\n**From:** ' + email + '\n**Topic:** ' + topic + '\n**Message:**\n' + message + '\n\n---\n*' + new Date().toISOString() + '*'
+    })
+  })
+  .then(function(r) {
+    if (r.ok || r.status === 204) {
+      status.style.color = 'var(--green)';
+      status.textContent = 'Message sent. We\'ll get back to you within 24 hours.';
+      e.target.reset();
+    } else {
+      throw new Error('Discord error');
+    }
+  })
+  .catch(function() {
+    // Fallback to email
+    window.location.href = 'mailto:build@swarmandbee.ai?subject=CreditSniper%20' + topic + '&body=' + encodeURIComponent(message + '\n\nFrom: ' + email);
+    status.style.color = 'var(--primary)';
+    status.textContent = 'Opening email...';
+  })
+  .finally(function() {
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+  });
+  return false;
+}
+</script>
+
+</body>
+</html>
