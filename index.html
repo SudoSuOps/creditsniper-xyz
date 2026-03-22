@@ -153,6 +153,14 @@ footer a:hover{color:var(--primary)}
 
 <!-- HERO -->
 <section class="hero">
+  <!-- TERMINAL -->
+  <div id="terminal" style="max-width:520px;margin:0 auto 28px;background:#0a0a0a;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;text-align:left;font-family:var(--mono);font-size:.82rem;line-height:1.8;min-height:120px">
+    <div style="color:var(--text-3);margin-bottom:8px"><span style="color:var(--green)">●</span> <span style="color:var(--primary)">●</span> <span style="color:#ef4444">●</span> &nbsp; creditsniper v27b</div>
+    <div id="terminal-text" style="color:var(--green)"></div>
+    <span id="cursor" style="color:var(--primary);animation:blink 1s infinite">█</span>
+  </div>
+  <style>@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}</style>
+
   <h1>Fix your <span>credit report</span></h1>
   <p class="sub">We read it. We find the errors. We write the letters. You print them or we mail them. That's it.</p>
   <p class="privacy">We don't store your data. We don't mine your data. We are healers only.</p>
@@ -298,6 +306,53 @@ footer a:hover{color:var(--primary)}
   <a href="/help">Help</a>
 </footer>
 
+<script>
+// Terminal typewriter
+(function() {
+  var lines = [
+    { text: '> initializing creditsniper-27b...', color: '#5a5a5a', delay: 40 },
+    { text: '> model loaded. 84,115 training pairs. eval loss 0.5776.', color: '#5a5a5a', delay: 30 },
+    { text: '> FCRA database: 1,352,472 statute references loaded', color: '#5a5a5a', delay: 25 },
+    { text: '> FDCPA database: 302,805 statute references loaded', color: '#5a5a5a', delay: 25 },
+    { text: '> PostGrid mail service: connected', color: '#5a5a5a', delay: 30 },
+    { text: '> sniper online.', color: '#22c55e', delay: 50 },
+    { text: '', color: '', delay: 500 },
+    { text: '🐝 ready to hunt. paste your report. let\'s work.', color: '#f59e0b', delay: 40 },
+  ];
+
+  var el = document.getElementById('terminal-text');
+  var cursor = document.getElementById('cursor');
+  var lineIdx = 0, charIdx = 0;
+
+  function typeChar() {
+    if (lineIdx >= lines.length) { cursor.style.display = 'none'; return; }
+    var line = lines[lineIdx];
+    if (line.text === '') {
+      lineIdx++;
+      setTimeout(typeChar, line.delay);
+      return;
+    }
+    if (charIdx === 0) {
+      var div = document.createElement('div');
+      div.style.color = line.color;
+      div.id = 'line-' + lineIdx;
+      el.appendChild(div);
+    }
+    var lineEl = document.getElementById('line-' + lineIdx);
+    charIdx++;
+    lineEl.textContent = line.text.substring(0, charIdx);
+    if (charIdx >= line.text.length) {
+      lineIdx++;
+      charIdx = 0;
+      setTimeout(typeChar, 300);
+    } else {
+      setTimeout(typeChar, line.delay);
+    }
+  }
+
+  setTimeout(typeChar, 500);
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 var sb = supabase.createClient('https://gizwfmgowyfadmvjjitb.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpendmbWdvd3lmYWRtdmpqaXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMTk5OTQsImV4cCI6MjA4NzY5NTk5NH0.2yfADZ83GHk0lNlanwOWPieV3sgrCGStdiGNAFEBqAI');
