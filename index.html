@@ -156,6 +156,16 @@ footer a:hover{color:var(--primary)}
   <h1>Fix your <span>credit report</span></h1>
   <p class="sub">We read it. We find the errors. We write the letters. You print them or we mail them. That's it.</p>
   <p class="privacy">We don't store your data. We don't mine your data. We are healers only.</p>
+
+  <div style="max-width:380px;margin:32px auto 0;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:24px">
+    <p style="font-size:.88rem;color:var(--text-2);text-align:center;margin-bottom:14px">Create your free account</p>
+    <form onsubmit="return heroSignup(event)">
+      <input type="email" id="hero-email" required placeholder="you@email.com" style="width:100%;padding:11px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font);font-size:.9rem;outline:none;margin-bottom:8px">
+      <button type="submit" id="hero-btn" style="width:100%;padding:12px;border:none;border-radius:6px;background:var(--primary);color:#050505;font-weight:600;font-size:.95rem;cursor:pointer;font-family:var(--font)">Start Free</button>
+    </form>
+    <p id="hero-status" style="font-size:.82rem;text-align:center;margin-top:8px;min-height:1.2em;color:var(--text-3)"></p>
+    <p style="font-size:.75rem;text-align:center;color:var(--text-3);margin-top:4px">1 free report analysis + 2 letter drafts. No credit card.</p>
+  </div>
 </section>
 
 <!-- HOW IT WORKS -->
@@ -275,8 +285,47 @@ footer a:hover{color:var(--primary)}
 <footer>
   <a href="https://swarmandbee.ai">Swarm &amp; Bee</a>
   <a href="/app">Launch App</a>
-  <a href="mailto:build@swarmandbee.ai">build@swarmandbee.ai</a>
+  <a href="/help">Help</a>
 </footer>
+
+<script>
+function heroSignup(e) {
+  e.preventDefault();
+  var email = document.getElementById('hero-email').value.trim();
+  var status = document.getElementById('hero-status');
+  var btn = document.getElementById('hero-btn');
+  if (!email) return false;
+
+  btn.textContent = 'Creating...';
+  btn.disabled = true;
+
+  fetch('https://router.swarmandbee.ai/subscribe', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email: email, source: 'creditsniper_homepage'})
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.ok || (data.message && data.message.includes('already'))) {
+      status.style.color = '#22c55e';
+      status.textContent = 'Check your email for your sign-in link.';
+      document.getElementById('hero-email').value = '';
+    } else {
+      status.style.color = '#ef4444';
+      status.textContent = data.message || 'Try again.';
+    }
+  })
+  .catch(function() {
+    status.style.color = '#ef4444';
+    status.textContent = 'Connection error. Try again.';
+  })
+  .finally(function() {
+    btn.textContent = 'Start Free';
+    btn.disabled = false;
+  });
+  return false;
+}
+</script>
 
 </body>
 </html>
